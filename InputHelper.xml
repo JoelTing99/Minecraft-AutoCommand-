@@ -1,0 +1,673 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+InputHelper
+</name>
+</assembly>
+<members>
+<member name="T:InputHelper.Constants">
+ <summary>
+ A class holding various InputHelper constants.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.Constants.AltGr">
+ <summary>
+ The Alt Gr key.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.Constants.KeyDownBit">
+ <summary>
+ The bit value used to check if a key is held down (masked with the return value from GetAsyncKeyState()).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.Constants.Windows1252">
+ <summary>
+ Windows-1252 encoding.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.ModifierKeys.None">
+ <summary>
+ No modifiers specified.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.ModifierKeys.Control">
+ <summary>
+ The CTRL modifier key.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.ModifierKeys.Shift">
+ <summary>
+ The SHIFT modifier key.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.ModifierKeys.Alt">
+ <summary>
+ The ALT modifier key.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.ModifierKeys.Windows">
+ <summary>
+ The Windows modifier key.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.KeyboardHookEventArgs.Block">
+ <summary>
+ Gets or sets a boolean value indicating whether the keystroke should be blocked from reaching any windows.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.KeyboardHookEventArgs.Extended">
+ <summary>
+ Gets a boolean value indicating whether the keystroke message originated from one of the additional keys on the enhanced keyboard 
+ (see: https://msdn.microsoft.com/en-us/library/windows/desktop/ms646267(v=vs.85).aspx#_win32_Keystroke_Message_Flags).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.KeyboardHookEventArgs.KeyCode">
+ <summary>
+ Gets the keyboard code of the key that generated the keystroke.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.KeyboardHookEventArgs.KeyState">
+ <summary>
+ Gets the current state of the key that generated the keystroke.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.KeyboardHookEventArgs.Modifiers">
+ <summary>
+ Gets the modifier keys that was pressed in combination with the keystroke.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.KeyboardHookEventArgs.ScanCode">
+ <summary>
+ Gets the hardware scan code of the key that generated the keystroke.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.EventArgs.KeyboardHookEventArgs.#ctor(System.Windows.Forms.Keys,System.UInt32,System.Boolean,InputHelper.Hooks.KeyState,InputHelper.ModifierKeys)">
+ <summary>
+ Initializes a new instance of the KeyboardHookEventArgs class.
+ </summary>
+ <param name="KeyCode">The keyboard code of the key that generated the keystroke.</param>
+ <param name="ScanCode">The hardware scan code of the key that generated the keystroke.</param>
+ <param name="Extended">Whether the keystroke message originated from one of the additional keys on the enhanced keyboard 
+ (see: https://msdn.microsoft.com/en-us/library/windows/desktop/ms646267(v=vs.85).aspx#_win32_Keystroke_Message_Flags). </param>
+ <param name="KeyState">The current state of the key that generated the keystroke.</param>
+ <param name="Modifiers">The modifier keys that was pressed in combination with the keystroke.</param>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.Block">
+ <summary>
+ Gets or sets a boolean value indicating whether the mouse event should be blocked from reaching any windows.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.Button">
+ <summary>
+ Gets which mouse button was pressed or released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.ButtonState">
+ <summary>
+ Gets the current state of the button that generated the mouse event.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.Delta">
+ <summary>
+ Gets a signed count of the number of detents the mouse wheel has rotated. A detent is one notch of the mouse wheel.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.DoubleClick">
+ <summary>
+ Gets a boolean value indicating whether the event was caused by a double click.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.Location">
+ <summary>
+ Gets the location of the mouse (in screen coordinates).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:InputHelper.EventArgs.MouseHookEventArgs.ScrollDirection">
+ <summary>
+ Gets which direction the mouse wheel was scrolled in.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.EventArgs.MouseHookEventArgs.#ctor(System.Windows.Forms.MouseButtons,InputHelper.Hooks.KeyState,System.Boolean,System.Drawing.Point,InputHelper.Hooks.ScrollDirection,System.Int32)">
+ <summary>
+ Initializes a new instance of the MouseHookEventArgs class.
+ </summary>
+ <param name="Button">Which mouse button was pressed or released.</param>
+ <param name="ButtonState">The current state of the button that generated the mouse event.</param>
+ <param name="DoubleClick">Whether the event was caused by a double click.</param>
+ <param name="Location">The location of the mouse (in screen coordinates).</param>
+ <param name="ScrollDirection">Which direction the mouse wheel was scrolled in.</param>
+ <param name="Delta">A signed count of the number of detents the mouse wheel has rotated.</param>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.Hooks.KeyboardHook">
+ <summary>
+ A global low-level keyboard hook that raises events when a key is pressed or released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.KeyboardHook.KeyDown">
+ <summary>
+ Occurs when a key is pressed or held down.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.KeyboardHook.KeyUp">
+ <summary>
+ Occurs when a key is released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Hooks.KeyboardHook.#ctor">
+ <summary>
+ Initializes a new instance of the KeyboardHook class.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.Hooks.LocalKeyboardHook">
+ <summary>
+ A local keyboard hook that raises events when a key is pressed or released in a specific thread.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.LocalKeyboardHook.KeyDown">
+ <summary>
+ Occurs when a key is pressed or held down.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.LocalKeyboardHook.KeyUp">
+ <summary>
+ Occurs when a key is released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Hooks.LocalKeyboardHook.#ctor">
+ <summary>
+ Initializes a new instance of the LocalKeyboardHook class attached to the current thread.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Hooks.LocalKeyboardHook.#ctor(System.UInt32)">
+ <summary>
+ Initializes a new instance of the LocalKeyboardHook class attached to the specified thread.
+ </summary>
+ <param name="ThreadID">The thread to attach the hook to.</param>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.Hooks.MouseHook">
+ <summary>
+ A global low-level mouse hook that raises events when a mouse event occurs.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.MouseHook.MouseDown">
+ <summary>
+ Occurs when a mouse button is pressed or held down.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.MouseHook.MouseUp">
+ <summary>
+ Occurs when a mouse button is released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.MouseHook.MouseMove">
+ <summary>
+ Occurs when the mouse moves.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:InputHelper.Hooks.MouseHook.MouseWheel">
+ <summary>
+ Occurs when the mouse wheel is scrolled.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Hooks.MouseHook.#ctor">
+ <summary>
+ Initializes a new instance of the MouseHook clas.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.Keyboard">
+ <summary>
+ A static class for handling and simulating physical keyboard input.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Keyboard.IsKeyDown(System.Windows.Forms.Keys)">
+ <summary>
+ Checks whether the specified key is currently held down.
+ </summary>
+ <param name="Key">The key to check.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Keyboard.IsKeyUp(System.Windows.Forms.Keys)">
+ <summary>
+ Checks whether the specified key is currently NOT held down.
+ </summary>
+ <param name="Key">The key to check.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Keyboard.PressKey(System.Windows.Forms.Keys,System.Boolean)">
+ <summary>
+ Simulates a keystroke.
+ </summary>
+ <param name="Key">The key to press.</param>
+ <param name="HardwareKey">Whether to simulate the keystroke using its virtual key code or its hardware scan code.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Keyboard.SetKeyState(System.Windows.Forms.Keys,System.Boolean,System.Boolean)">
+ <summary>
+ Simulates a key being pushed down or released.
+ </summary>
+ <param name="Key">The key which to simulate.</param>
+ <param name="KeyDown">Whether to push down or release the key.</param>
+ <param name="HardwareKey">Whether to simulate the event using the key's virtual key code or its hardware scan code.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Keyboard.GetKeyboardInputStructure(System.Windows.Forms.Keys,System.Boolean,System.Boolean)">
+ <summary>
+ Constructs a native keyboard INPUT structure that can be passed to SendInput().
+ </summary>
+ <param name="Key">The key to send.</param>
+ <param name="KeyDown">Whether to send a KeyDown/KeyUp stroke.</param>
+ <param name="HardwareKey">Whether to send the key's hardware scan code instead of its virtual key code.</param>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.Mouse">
+ <summary>
+ A static class for handling and simulating physical mouse input.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Mouse.IsButtonDown(System.Windows.Forms.MouseButtons)">
+ <summary>
+ Checks whether the specified mouse button is currently held down.
+ </summary>
+ <param name="Button">The mouse button to check.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Mouse.IsButtonUp(System.Windows.Forms.MouseButtons)">
+ <summary>
+ Checks whether the specified mouse button is currently NOT held down.
+ </summary>
+ <param name="Button">The mouse button to check.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Mouse.PressButton(System.Windows.Forms.MouseButtons)">
+ <summary>
+ Simulates a mouse button click.
+ </summary>
+ <param name="Button">The button to press.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Mouse.SetButtonState(System.Windows.Forms.MouseButtons,System.Boolean)">
+ <summary>
+ Simulates a mouse button being pushed down or released.
+ </summary>
+ <param name="Button">The button which to simulate.</param>
+ <param name="MouseDown">Whether to push down or release the mouse button.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Mouse.GetMouseClickInputStructure(System.Windows.Forms.MouseButtons,System.Boolean)">
+ <summary>
+ Constructs a native mouse INPUT structure for click events that can be passed to SendInput().
+ </summary>
+ <param name="Button">The button of the event.</param>
+ <param name="MouseDown">Whether to push down or release the mouse button.</param>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.WindowMessages">
+ <summary>
+ A static class for handling and simulating input via Window Messages.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.WindowMessages.KeyboardState">
+ <summary>
+ An array holding all keys' current states (down/up).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.WindowMessages.IsAltCodeCombination">
+ <summary>
+ Indicates whether we are currently in an ALT+numpad combination (ALT code).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.WindowMessages.AltCode">
+ <summary>
+ A list holding the keys pressed during an ALT+numpad combination.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.WindowMessages.IsAltCodeCP437">
+ <summary>
+ Whether the current alt code is a Codepage 437 code.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.WindowMessages.CP437LookupTable">
+ <summary>
+ Lookup table for Codepage 437-to-Unicode character codes.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.IsKeyDown(System.Windows.Forms.Keys)">
+ <summary>
+ Checks whether a specific key is down in InputHelper's internal keyboard state (not related to the physical keyboard!).
+ </summary>
+ <param name="Key">The key to check.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.IsKeyToggled(System.Windows.Forms.Keys)">
+ <summary>
+ Checks whether a specific key is toggled or not in InputHelper's internal keyboard state (not related to the physical keyboard!).
+ </summary>
+ <param name="Key">The key to check (e.g. Keys.CapsLock, Keys.NumLock, etc.).</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.IsModifierDown(InputHelper.ModifierKeys)">
+ <summary>
+ Checks whether any Left or Right version of a modifier is down in InputHelper's internal keyboard state (not related to the physical keyboard!).
+ </summary>
+ <param name="Modifier">The modifier to check.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendAltCode(System.Windows.Forms.Keys[])">
+ <summary>
+ Sends an ALT code message to the active window.
+ </summary>
+ <param name="NumpadKeys">The numpad combination to send.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendAltCode(System.IntPtr,System.Windows.Forms.Keys[])">
+ <summary>
+ Sends an ALT code message to a window.
+ </summary>
+ <param name="WindowHandle">The handle of the window to send the ALT code message to.</param>
+ <param name="NumpadKeys">The numpad combination to send.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendKey(System.Windows.Forms.Keys,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Sends a KeyDown/KeyUp message to the active window.
+ </summary>
+ <param name="Key">The key to send.</param>
+ <param name="KeyDown">Whether to send a KeyDown or KeyUp message.</param>
+ <param name="HardwareKey">Whether to send the hardware scan code along with the virtual key code (recommended to be 'True'!).</param>
+ <param name="SendAsynchronously">Whether or not to wait for the window to handle the message before continuing.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendKey(System.IntPtr,System.Windows.Forms.Keys,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Sends a KeyDown/KeyUp message to a window.
+ </summary>
+ <param name="WindowHandle">The handle of the window to send the key message to.</param>
+ <param name="Key">The key to send.</param>
+ <param name="KeyDown">Whether to send a KeyDown or KeyUp message.</param>
+ <param name="HardwareKey">Whether to send the hardware scan code along with the virtual key code (recommended to be 'True'!).</param>
+ <param name="SendAsynchronously">Whether or not to wait for the window to handle the message before continuing.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendKeyPress(System.Windows.Forms.Keys,System.Boolean,System.Boolean)">
+ <summary>
+ Sends a keystroke message to the active window.
+ </summary>
+ <param name="Key">The key to send.</param>
+ <param name="HardwareKey">Whether to send the hardware scan code along with the virtual key code (recommended to be 'True'!).</param>
+ <param name="SendAsynchronously">Whether or not to wait for the window to handle the message before continuing.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendKeyPress(System.IntPtr,System.Windows.Forms.Keys,System.Boolean,System.Boolean)">
+ <summary>
+ Sends a keystroke message to a window.
+ </summary>
+ <param name="WindowHandle">The handle of the window to send the keystroke message to.</param>
+ <param name="Key">The key to send.</param>
+ <param name="HardwareKey">Whether to send the hardware scan code along with the virtual key code (recommended to be 'True'!).</param>
+ <param name="SendAsynchronously">Whether or not to wait for the window to handle the message before continuing.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.ToggleKey(System.Windows.Forms.Keys,System.Nullable{System.Boolean})">
+ <summary>
+ Toggles a specific key in InputHelper's internal keyboard state (not related to the physical keyboard!). Use only with toggleable keys!
+ </summary>
+ <param name="Key">The key to toggle (e.g. Keys.CapsLock, Keys.NumLock, etc.).</param>
+ <param name="SetToggled">Whether to mark the key as toggled or untoggled (Nothing/Null = toggle automatically).</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendMouseClick(System.Windows.Forms.MouseButtons,System.Drawing.Point)">
+ <summary>
+ Sends a Window Message-based mouse click to the window located at the specified coordinates of the screen. 
+ The coordinates are automatically translated to client coordinates and the click occurs in that specific point of the window.
+ </summary>
+ <param name="Button">The button to press.</param>
+ <param name="Location">The position where to send the click (in screen coordinates).</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendMouseClick(System.Windows.Forms.MouseButtons,System.Drawing.Point,System.Boolean,System.Boolean)">
+ <summary>
+ Sends a Window Message-based mouse click to the window located at the specified coordinates of the screen. 
+ The coordinates are automatically translated to client coordinates and the click occurs in that specific point of the window.
+ </summary>
+ <param name="Button">The button to press.</param>
+ <param name="Location">The position where to send the click (in screen coordinates).</param>
+ <param name="MouseDown">Whether to push down or release the mouse button.</param>
+ <param name="SendAsynchronously">Whether or not to wait for the window to handle the message before continuing.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.GetActiveWindow">
+ <summary>
+ Gets the active top-level window.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.GetAbsoluteActiveWindow">
+ <summary>
+ Gets the (absolute) active top-level window or child window (apart from GetActiveWindow() which will only get the active top-level window).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.GetKeyWindowMessage(System.Windows.Forms.Keys,System.Boolean)">
+ <summary>
+ Gets the window message type of the specified key.
+ </summary>
+ <param name="Key">The key to use for the message.</param>
+ <param name="KeyDown">Whether this is a KeyDown or KeyUp message.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.InternalSendKey(System.IntPtr,System.Windows.Forms.Keys,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Internal method for sending KeyDown/KeyUp messages to a specific window (DOES NOT HANDLE MODIFIERS! USE 'SendKey()' INSTEAD!).
+ </summary>
+ <param name="WindowHandle">The handle to the window to send the keystrokes to.</param>
+ <param name="Key">The key to send.</param>
+ <param name="KeyDown">Whether to send a KeyDown or KeyUp message.</param>
+ <param name="HardwareKey">Whether to send the hardware scan code along with the virtual key code (recommended to be 'True'!).</param>
+ <param name="SendAsynchronously">Whether or not to wait for the window to handle the message before continuing.</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.MakeKeyLParam(System.Windows.Forms.Keys,System.Boolean,System.Boolean)">
+ <summary>
+ Constructs the lParam parameter of a key message.
+ </summary>
+ <param name="Key">The key of the message.</param>
+ <param name="KeyDown">Whether this is a KeyDown or KeyUp message.</param>
+ <param name="HardwareKey">Whether to include the key's hardware scan code in the lParam parameter (recommended to be 'True'!).</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.WindowMessages.SendMessage(System.IntPtr,System.UInt32,System.IntPtr,System.IntPtr,System.Boolean)">
+ <summary>
+ Sends or posts a message to a window's message queue.
+ </summary>
+ <param name="hWnd">The handle of the window to send the message to.</param>
+ <param name="Msg">The window message to send.</param>
+ <param name="wParam">The wParam of the message.</param>
+ <param name="lParam">The lParam of the message.</param>
+ <param name="Asynchronous">Whether to post or send the message to the window's message queue.</param>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.Internal">
+ <summary>
+ A class holding internal methods and fields related to InputHelper.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Internal.ExtractModifiers(System.Windows.Forms.Keys@)">
+ <summary>
+ Extracts any .NET modifiers from the specified key combination and returns them as native virtual key code keys.
+ </summary>
+ <param name="Key">The key combination to extract the modifiers from (if any).</param>
+ <remarks></remarks>
+</member>
+<member name="M:InputHelper.Internal.IsModifier(System.Windows.Forms.Keys,InputHelper.ModifierKeys)">
+ <summary>
+ Checks whether the specified key is any Left or Right version of the specified modifier.
+ </summary>
+ <param name="Key">The key to check.</param>
+ <param name="Modifier">The modifier to check for.</param>
+ <remarks></remarks>
+</member>
+<member name="T:InputHelper.NativeMethods">
+ <summary>
+ A class containing all the native WinAPI methods, structures, declarations, etc. used by InputHelper.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.KEYEVENTF.EXTENDEDKEY">
+ <summary>
+ If specified, the scan code was preceded by a prefix byte that has the value 0xE0 (224).
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.KEYEVENTF.KEYUP">
+ <summary>
+ If specified, the key is being released. If not specified, the key is being pressed.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.KEYEVENTF.SCANCODE">
+ <summary>
+ If specified, wScan identifies the key and wVk is ignored.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.KEYEVENTF.UNICODE">
+ <summary>
+ If specified, the system synthesizes a VK_PACKET keystroke. The wVk parameter must be zero. This flag can only be combined with the KEYEVENTF_KEYUP flag.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.ABSOLUTE">
+ <summary>
+ The dx and dy members contain normalized absolute (screen) coordinates.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.HWHEEL">
+ <summary>
+ The wheel was moved horizontally, if the mouse has a wheel. The amount of movement is specified in mouseData.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.MOVE">
+ <summary>
+ Movement occurred.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.MOVE_NOCOALESCE">
+ <summary>
+ The WM_MOUSEMOVE messages will not be coalesced. The default behavior is to coalesce WM_MOUSEMOVE messages.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.LEFTDOWN">
+ <summary>
+ The left button was pressed.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.LEFTUP">
+ <summary>
+ The left button was released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.RIGHTDOWN">
+ <summary>
+ The right button was pressed.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.RIGHTUP">
+ <summary>
+ The right button was released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.MIDDLEDOWN">
+ <summary>
+ The middle button was pressed.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.MIDDLEUP">
+ <summary>
+ The middle button was released.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.VIRTUALDESK">
+ <summary>
+ Maps coordinates to the entire desktop. Must be used with MOUSEEVENTF_ABSOLUTE.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.WHEEL">
+ <summary>
+ The wheel was moved, if the mouse has a wheel. The amount of movement is specified in mouseData.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.XDOWN">
+ <summary>
+ An X button was pressed.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="F:InputHelper.NativeMethods.MOUSEEVENTF.XUP">
+ <summary>
+ An X button was released.
+ </summary>
+ <remarks></remarks>
+</member>
+</members>
+</doc>
